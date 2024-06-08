@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Transaction;
+use App\Models\Wallet;
+use App\Policies\WalletPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(Wallet::class, WalletPolicy::class);
     }
 }
