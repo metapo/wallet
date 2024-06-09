@@ -19,7 +19,7 @@ class WalletService
 
     private function listUserWallets()
     {
-        return Auth::user()->wallets()->select(['uuid', 'title', 'description', 'status', 'created_at'])->get();
+        return Auth::user()->wallets()->select(['id', 'uuid', 'title', 'description', 'status', 'created_at'])->get();
     }
 
     private function listAllWallets()

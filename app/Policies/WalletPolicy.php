@@ -16,4 +16,10 @@ class WalletPolicy
     {
         return true;
     }
+
+    public function update(User $user, Wallet $wallet)
+    {
+        return $user->id === $wallet->user_id;
+    }
+
 }

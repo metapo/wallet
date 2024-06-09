@@ -49,11 +49,17 @@ class Wallet extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function lastTransactionDate()
+    {
+        $lastTransaction = $this->transactions()->latest()->first();
+        return $lastTransaction?->created_at;
+    }
+
     public function getBalanceAttribute(): float
     {
         return $this->transactions()
             ->selectRaw('SUM(CASE WHEN type = ? THEN amount ELSE 0 END) - SUM(CASE WHEN type = ? THEN amount ELSE 0 END) AS balance',
                 [TransactionType::Deposit, TransactionType::Withdraw])
-            ->value('balance');
+            ->value('balance') ?? 0.00;
     }
 }

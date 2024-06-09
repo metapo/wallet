@@ -6,6 +6,7 @@ use App\Enums\WalletStatus;
 use App\Http\Requests\WalletRequest;
 use App\Models\Wallet;
 use App\Services\WalletService;
+use Illuminate\Support\Facades\Gate;
 
 class WalletController extends Controller
 {
@@ -15,13 +16,14 @@ class WalletController extends Controller
 
     public function index()
     {
-        $list = $this->walletService->listWallets();
-        return $list;
+        $listWallets = $this->walletService->listWallets();
+
+        return view('pages.wallets.index', compact('listWallets'));
     }
 
     public function create()
     {
-        return view('tests.wallet.form');
+        return view('pages.wallets.create');
     }
 
     public function store(WalletRequest $request)
@@ -34,12 +36,16 @@ class WalletController extends Controller
         return redirect()->back()->with('success', 'Wallet created successfully.');
     }
 
-    public function edit(Wallet $wallet) {
-        return view('tests.wallet.form', compact('wallet'));
-    }
+//    public function edit(Wallet $wallet) {
+//        Gate::authorize('update', $wallet);
+//
+//        return view('tests.wallet.form', compact('wallet'));
+//    }
 
     public function update(Wallet $wallet, WalletRequest $request)
     {
+        Gate::authorize('update', $wallet);
+
         $this->walletService->updateWallet(
             $wallet,
             $request->input('title'),
